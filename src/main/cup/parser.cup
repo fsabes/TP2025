@@ -6,15 +6,47 @@ class Parser;
 
 
 // Terminals
-terminal ASSIG;
+terminal WHILE;
+terminal IF;
+terminal ELSE;
+terminal INIT;
+terminal INT;
+terminal FLOAT;
+terminal STRING;
+terminal NOT;
+terminal AND;
+terminal OR;
+terminal WRITE;
+terminal READ;
+terminal OP_GREATER;
+terminal OP_LESSER;
+terminal OP_GREATER_EQUAL;
+terminal OP_LESSER_EQUAL;
+terminal OP_EQUAL;
+terminal OP_NOT_EQUAL;
+terminal OP_ASSIG;
 terminal PLUS;
 terminal SUB;
 terminal MULT;
 terminal DIV;
+terminal SPACE;
+terminal COMMA;
+terminal DOT;
+terminal COLON;
+terminal OPEN_KEY_BRACKET;
+terminal CLOSE_KEY_BRACKET;
 terminal OPEN_BRACKET;
 terminal CLOSE_BRACKET;
-terminal INTEGER_CONSTANT;
+terminal OPEN_SQUARE_BRACKET;
+terminal CLOSE_SQUARE_BRACKET;
+terminal REORDER;
+terminal SUM_FIRSTS_PRIMES;
 terminal IDENTIFIER;
+terminal CONST_FLOAT;
+terminal CONST_INT;
+terminal CONST_STRING;
+terminal COMMENT;
+terminal BINARY;
 
 // Non Terminals
 non terminal sentence;
@@ -27,7 +59,7 @@ non terminal factor;
 start with sentence;
 
 sentence ::= assignment {: System.out.println("End"); :};
-assignment ::= IDENTIFIER ASSIG expression {: System.out.println("Assignment"); :};
+assignment ::= IDENTIFIER OP_ASSIG expression {: System.out.println("Assignment"); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
@@ -35,5 +67,5 @@ term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= INTEGER_CONSTANT:constant {: System.out.println("Constant: " + constant ); :};
+factor ::= CONST_INT:constant {: System.out.println("Constant: " + constant ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
