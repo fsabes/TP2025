@@ -1,1 +1,12 @@
 c=d*(e-21)/4
+
+a := 1
+b := 3
+
+while (a > b)
+{
+    read(base)
+    write("a es mas grande que b")
+    read(base)
+    a := a + 1
+}

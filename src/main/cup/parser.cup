@@ -51,7 +51,11 @@ terminal BINARY;
 // Non Terminals
 non terminal sentence;
 non terminal assignment;
+non terminal while;
+non terminal write;
+non terminal read;
 non terminal expression;
+non terminal condition;
 non terminal term;
 non terminal factor;
 
@@ -59,6 +63,24 @@ non terminal factor;
 start with sentence;
 
 sentence ::= assignment {: System.out.println("End"); :};
+sentence ::= assignment sentence {: System.out.println("Other Sentence"); :};
+sentence ::= while {: System.out.println("While sentence"); :};
+sentence ::= while sentence {: System.out.println("Other Sentence"); :};
+sentence ::= write {: System.out.println("Write sentence"); :};
+sentence ::= write sentence {: System.out.println("Other Sentence"); :};
+sentence ::= read {: System.out.println("Read sentence"); :};
+sentence ::= read sentence {: System.out.println("Other Sentence"); :};
+condition ::= condition OP_GREATER expression {: System.out.println("Condition >"); :};
+condition ::= condition OP_LESSER expression {: System.out.println("Condition <"); :};
+condition ::= condition OP_GREATER_EQUAL expression {: System.out.println("Condition >="); :};
+condition ::= condition OP_LESSER_EQUAL expression {: System.out.println("Condition <="); :};
+condition ::= condition OP_EQUAL expression {: System.out.println("Condition ="); :};
+condition ::= condition OP_NOT_EQUAL expression {: System.out.println("Condition !="); :};
+condition ::= expression {: System.out.println("Condition = Expression"); :};
+while ::= WHILE OPEN_BRACKET condition CLOSE_BRACKET OPEN_KEY_BRACKET sentence CLOSE_KEY_BRACKET {: System.out.println("While"); :};
+write ::= WRITE OPEN_BRACKET CONST_STRING:constant CLOSE_BRACKET {: System.out.println("Write: Constant String: " + constant); :};
+write ::= WRITE OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {: System.out.println("Write: id: " + id); :};
+read ::= READ OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {: System.out.println("Read: id: " + id); :};
 assignment ::= IDENTIFIER OP_ASSIG expression {: System.out.println("Assignment"); :};
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};

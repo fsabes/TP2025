@@ -97,7 +97,7 @@ Identifier = {LetterLowerCase} ({Letter}|{Digit})*
 <YYINITIAL> {
   {Comment}                                 { /* ignore */ }
 
-  {If}                                      {  return symbol(ParserSym.IF); }
+  {If}                                      { return symbol(ParserSym.IF); }
   {Else}                                    { return symbol(ParserSym.ELSE); }
   {Reorder}                                 { return symbol(ParserSym.REORDER); }
   {SumFirstsPrimes}                         { return symbol(ParserSym.SUM_FIRSTS_PRIMES); }
