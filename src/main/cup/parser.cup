@@ -58,18 +58,22 @@ non terminal expression;
 non terminal condition;
 non terminal term;
 non terminal factor;
+non terminal expressionList;
+non terminal multipleSentence;
+non terminal sentenceInit;
+non terminal reorder;
 
 // Start Symbol Definition
-start with sentence;
+start with sentenceInit;
 
+sentenceInit ::= multipleSentence {:System.out.println("sentenceInit ::= multipleSentence"); :};
+multipleSentence ::= sentence multipleSentence {: System.out.println("multipleSentence ::= sentence multipleSentence"); :};
+multipleSentence ::= sentence {: System.out.println("multipleSentence ::= sentence"); :};
 sentence ::= assignment {: System.out.println("End"); :};
-sentence ::= assignment sentence {: System.out.println("Other Sentence"); :};
 sentence ::= while {: System.out.println("While sentence"); :};
-sentence ::= while sentence {: System.out.println("Other Sentence"); :};
 sentence ::= write {: System.out.println("Write sentence"); :};
-sentence ::= write sentence {: System.out.println("Other Sentence"); :};
 sentence ::= read {: System.out.println("Read sentence"); :};
-sentence ::= read sentence {: System.out.println("Other Sentence"); :};
+sentence ::= reorder {: System.out.println("Sum first primes sentence"); :};
 condition ::= condition OP_GREATER expression {: System.out.println("Condition >"); :};
 condition ::= condition OP_LESSER expression {: System.out.println("Condition <"); :};
 condition ::= condition OP_GREATER_EQUAL expression {: System.out.println("Condition >="); :};
@@ -77,7 +81,7 @@ condition ::= condition OP_LESSER_EQUAL expression {: System.out.println("Condit
 condition ::= condition OP_EQUAL expression {: System.out.println("Condition ="); :};
 condition ::= condition OP_NOT_EQUAL expression {: System.out.println("Condition !="); :};
 condition ::= expression {: System.out.println("Condition = Expression"); :};
-while ::= WHILE OPEN_BRACKET condition CLOSE_BRACKET OPEN_KEY_BRACKET sentence CLOSE_KEY_BRACKET {: System.out.println("While"); :};
+while ::= WHILE OPEN_BRACKET condition CLOSE_BRACKET OPEN_KEY_BRACKET multipleSentence CLOSE_KEY_BRACKET {: System.out.println("While"); :};
 write ::= WRITE OPEN_BRACKET CONST_STRING:constant CLOSE_BRACKET {: System.out.println("Write: Constant String: " + constant); :};
 write ::= WRITE OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {: System.out.println("Write: id: " + id); :};
 read ::= READ OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {: System.out.println("Read: id: " + id); :};
@@ -85,9 +89,14 @@ assignment ::= IDENTIFIER OP_ASSIG expression {: System.out.println("Assignment"
 expression ::= expression PLUS term {: System.out.println("+"); :};
 expression ::= expression SUB term {: System.out.println("-"); :};
 expression ::= term {: System.out.println("Expression = Term"); :};
+expression ::= SUM_FIRSTS_PRIMES factor {: System.out.println("sumFirstsPrimes = Expression"); :};
 term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
 factor ::= CONST_INT:constant {: System.out.println("Constant: " + constant ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
+reorder ::= REORDER OPEN_BRACKET OPEN_SQUARE_BRACKET expressionList CLOSE_SQUARE_BRACKET COMMA CONST_INT COMMA CONST_INT CLOSE_BRACKET {: System.out.println("reorder"); :};
+expressionList ::= expression COMMA expressionList {: System.out.println(","); :};
+expressionList ::= expression {: System.out.println("expressionList = expression"); :};
+

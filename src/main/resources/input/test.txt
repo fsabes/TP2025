@@ -2,11 +2,17 @@ c=d*(e-21)/4
 
 a := 1
 b := 3
+c := sumFirstsPrimes(9-2)
 
 while (a > b)
 {
+    reorder([2,3,3+2,3-42+a],2,1)
     read(base)
     write("a es mas grande que b")
+    reorder([2],2,1)
     read(base)
     a := a + 1
 }
+    reorder([2,3,3+2,3-42+a],2,1)
+    reorder([1,2,3,4],2,1)
+    d := sumFirstsPrimes(3)

@@ -16,6 +16,7 @@ import java.io.IOException
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
+    println("************    REGLAS GRAMATICALES    ************")
     if (args.size != 1) {
         println(NO_FILENAME_PROVIDED_MESSAGE_ERROR)
         exitProcess(0)
@@ -35,5 +36,6 @@ fun main(args: Array<String>) {
         System.err.println("$COMPILATION_ERROR_MESSAGE ${e.message}")
         exitProcess(0)
     }
+    println("************    FIN REGLAS GRAMATICALES    ************")
     println(COMPILATION_SUCCESSFUL_MESSAGE)
 }
