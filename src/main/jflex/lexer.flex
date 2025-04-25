@@ -2,6 +2,7 @@ package lyc.compiler;
 
 import java_cup.runtime.Symbol;
 import lyc.compiler.model.*;
+import lyc.compiler.constants.*;
 %%
 
 %public
@@ -85,7 +86,7 @@ Digit = [0-9]
 ConstInt = {Digit}+
 ConstFloat = {Digit}+{Dot}{Digit}+ | {Digit} +{Dot} | {Dot}{Digit}+
 ConstString = {Comillas} [^\"] ~{Comillas}
-Comment = ("/*" [^*] ~"*/" | "/*" "*"+ "/") | ("*-" [^*] ~"-*" | "*-" "-"+ "*")
+Comment = ("/*" [^*] ~"*/" | "/*" "*"+ "/") | ("*-" [^*] ~"-*" | "*-" "-"+ "*") | ("#" [^*] ~"#")
 
 WhiteSpace = {LineTerminator} | {Identation} | {Space}
 Identifier = {LetterLowerCase} ({Letter}|{Digit})*
@@ -110,7 +111,7 @@ Identifier = {LetterLowerCase} ({Letter}|{Digit})*
   {Else}                                    { return symbol(ParserSym.ELSE); }
   {Init}                                    { return symbol(ParserSym.INIT, yytext()); }
   /* identifiers */
-  {Identifier}                              { /*if(yylength() > MAX_LENGTH){ throw new InvalidLengthException(yytext()); }*/
+  {Identifier}                              { if(yylength() > 50){ throw new InvalidLengthException(yytext()); }
           return symbol(ParserSym.IDENTIFIER, yytext()); }
   /* Constants */
 
@@ -118,9 +119,18 @@ Identifier = {LetterLowerCase} ({Letter}|{Digit})*
   {ConstInt}                                {
                                               int value;
                                               try {
+                                                   if (yytext().startsWith("-")) {
+                                                          throw new InvalidIntegerException("Negative integers are not allowed: " + yytext());
+                                                   }
+
                                                   value = Integer.parseInt(yytext());
+                                                                System.out.println(value);
+
                                               } catch (NumberFormatException e) {
                                                   throw new InvalidIntegerException(yytext());
+                                              }
+                                              if (value < 0) {
+                                                  throw new InvalidIntegerException("Negative integer not allowed: " + yytext());
                                               }
                                               if(value >= 65536) {
                                                   throw new InvalidIntegerException(yytext());
@@ -128,7 +138,7 @@ Identifier = {LetterLowerCase} ({Letter}|{Digit})*
                                                   return symbol(ParserSym.CONST_INT, yytext());
                                               }
                                           }
-  {ConstString}                             { /*if(yylength() > MAX_LENGTH){ throw new InvalidLengthException(yytext()); }*/
+  {ConstString}                             { if(yylength() > 50 ){ throw new InvalidLengthException(yytext()); }
           return symbol(ParserSym.CONST_STRING, yytext()); }
   {Comment}                                 { return symbol(ParserSym.COMMENT); }
 

@@ -51,6 +51,7 @@ terminal BINARY;
 // Non Terminals
 non terminal sentence;
 non terminal assignment;
+non terminal if;
 non terminal while;
 non terminal write;
 non terminal read;
@@ -62,15 +63,25 @@ non terminal expressionList;
 non terminal multipleSentence;
 non terminal sentenceInit;
 non terminal reorder;
+non terminal comment;
+
+non terminal blockInit;
+non terminal variableDeclaration;
+non terminal variableList;
+non terminal type;
+non terminal variableDeclarationList;
 
 // Start Symbol Definition
 start with sentenceInit;
 
 sentenceInit ::= multipleSentence {:System.out.println("sentenceInit ::= multipleSentence"); :};
+sentenceInit ::= /* EMPTY */ {:System.out.println("comentario"); :};
 multipleSentence ::= sentence multipleSentence {: System.out.println("multipleSentence ::= sentence multipleSentence"); :};
 multipleSentence ::= sentence {: System.out.println("multipleSentence ::= sentence"); :};
+sentence ::= blockInit;
 sentence ::= assignment {: System.out.println("End"); :};
 sentence ::= while {: System.out.println("While sentence"); :};
+sentence ::= if {: System.out.println("If sentence"); :};
 sentence ::= write {: System.out.println("Write sentence"); :};
 sentence ::= read {: System.out.println("Read sentence"); :};
 sentence ::= reorder {: System.out.println("Sum first primes sentence"); :};
@@ -81,7 +92,12 @@ condition ::= condition OP_LESSER_EQUAL expression {: System.out.println("Condit
 condition ::= condition OP_EQUAL expression {: System.out.println("Condition ="); :};
 condition ::= condition OP_NOT_EQUAL expression {: System.out.println("Condition !="); :};
 condition ::= expression {: System.out.println("Condition = Expression"); :};
+condition ::= condition AND expression {: System.out.println("Condition AND"); :};
+condition ::= condition OR expression {: System.out.println("Condition OR"); :};
+condition ::= NOT expression {: System.out.println("Condition NOT"); :};
 while ::= WHILE OPEN_BRACKET condition CLOSE_BRACKET OPEN_KEY_BRACKET multipleSentence CLOSE_KEY_BRACKET {: System.out.println("While"); :};
+if ::= IF OPEN_BRACKET condition CLOSE_BRACKET OPEN_KEY_BRACKET multipleSentence CLOSE_KEY_BRACKET {: System.out.println("If"); :};
+if ::= IF OPEN_BRACKET condition CLOSE_BRACKET OPEN_KEY_BRACKET multipleSentence CLOSE_KEY_BRACKET ELSE  OPEN_KEY_BRACKET multipleSentence CLOSE_KEY_BRACKET {: System.out.println("If"); :};
 write ::= WRITE OPEN_BRACKET CONST_STRING:constant CLOSE_BRACKET {: System.out.println("Write: Constant String: " + constant); :};
 write ::= WRITE OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {: System.out.println("Write: id: " + id); :};
 read ::= READ OPEN_BRACKET IDENTIFIER:id CLOSE_BRACKET {: System.out.println("Read: id: " + id); :};
@@ -94,9 +110,20 @@ term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
 factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= CONST_INT:constant {: System.out.println("Constant: " + constant ); :};
+factor ::= CONST_FLOAT:constant {: System.out.println("Constant float: " + constant ); :};
+factor ::= CONST_INT:constant {: System.out.println("Constant int: " + constant ); :};
+factor ::= CONST_STRING:constant {: System.out.println("Constant string: " + constant ); :};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
 reorder ::= REORDER OPEN_BRACKET OPEN_SQUARE_BRACKET expressionList CLOSE_SQUARE_BRACKET COMMA CONST_INT COMMA CONST_INT CLOSE_BRACKET {: System.out.println("reorder"); :};
 expressionList ::= expression COMMA expressionList {: System.out.println(","); :};
 expressionList ::= expression {: System.out.println("expressionList = expression"); :};
 
+blockInit ::= INIT OPEN_KEY_BRACKET variableDeclarationList CLOSE_KEY_BRACKET {: System.out.println("Init Block"); :};
+variableDeclarationList ::= variableDeclaration variableDeclarationList {: System.out.println("Init de variables"); :};
+variableDeclarationList ::= variableDeclaration {: System.out.println("Una sola declaracion de variable"); :};
+variableDeclaration ::= variableList COLON type {: System.out.println("Init de variable"); :};
+variableList ::= IDENTIFIER {: System.out.println("Variable"); :};
+variableList ::= IDENTIFIER COMMA variableList {: System.out.println("Variable"); :};
+type ::= FLOAT {: System.out.println("Tipo: Float"); :};
+type ::= INT {: System.out.println("Tipo: Int"); :};
+type ::= STRING {: System.out.println("Tipo: String"); :};

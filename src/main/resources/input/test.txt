@@ -1,10 +1,25 @@
+#+ Esto es un comentario +#
+
+init {
+    a1, b1 : Float
+    variable1 : Int
+    p1, p2, p3 : String
+}
+
 c=d*(e-21)/4
 
 a := 1
 b := 3
 c := sumFirstsPrimes(9-2)
 
-while (a > b)
+if (NOT a) {
+    /* Comentario */
+    a := 4
+} else {
+    b := c + 4
+}
+
+while (a > b AND b < c)
 {
     reorder([2,3,3+2,3-42+a],2,1)
     read(base)

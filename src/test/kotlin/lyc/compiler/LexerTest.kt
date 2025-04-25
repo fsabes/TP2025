@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.io.IOException
 
+
 @Disabled
 class LexerTest {
     private var lexer: Lexer? = null
@@ -54,6 +55,7 @@ class LexerTest {
     fun invalidNegativeIntegerConstantValue() {
         assertThrows(InvalidIntegerException::class.java) {
             scan(String.format("%d", -9223372036854775807L))
+            assertThat(nextToken()).isEqualTo(ParserSym.SUB)
             nextToken()
         }
     }
