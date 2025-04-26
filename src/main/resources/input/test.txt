@@ -6,6 +6,10 @@ init {
     p1, p2, p3 : String
 }
 
+z := "Franco ripamonti <3"
+
+g = h + 999.9
+
 c=d*(e-21)/4
 
 a := 1

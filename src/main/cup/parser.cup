@@ -1,9 +1,14 @@
 package lyc.compiler;
 
 import java_cup.runtime.*;
+import kotlin.Unit;
+import lyc.compiler.model.SymbolTable;
 
 class Parser;
 
+action code {:
+    public SymbolTable symbolTable = new SymbolTable();
+:}
 
 // Terminals
 terminal WHILE;
@@ -71,10 +76,15 @@ non terminal variableList;
 non terminal type;
 non terminal variableDeclarationList;
 
+
 // Start Symbol Definition
 start with sentenceInit;
 
-sentenceInit ::= multipleSentence {:System.out.println("sentenceInit ::= multipleSentence"); :};
+sentenceInit ::= multipleSentence
+    {:
+        System.out.println("sentenceInit ::= multipleSentence");
+        symbolTable.printTable();
+    :};
 sentenceInit ::= /* EMPTY */ {:System.out.println("comentario"); :};
 multipleSentence ::= sentence multipleSentence {: System.out.println("multipleSentence ::= sentence multipleSentence"); :};
 multipleSentence ::= sentence {: System.out.println("multipleSentence ::= sentence"); :};
@@ -109,10 +119,22 @@ expression ::= SUM_FIRSTS_PRIMES factor {: System.out.println("sumFirstsPrimes =
 term ::= term MULT factor {: System.out.println("*"); :};
 term ::= term DIV factor {: System.out.println("/"); :};
 term ::= factor {: System.out.println("Term = factor"); :};
-factor ::= IDENTIFIER:id  {: System.out.println("Id: " + id); :};
-factor ::= CONST_FLOAT:constant {: System.out.println("Constant float: " + constant ); :};
-factor ::= CONST_INT:constant {: System.out.println("Constant int: " + constant ); :};
-factor ::= CONST_STRING:constant {: System.out.println("Constant string: " + constant ); :};
+factor ::= IDENTIFIER:id  {:
+    symbolTable.addSymbol(id.toString(), "Id", "-", id.toString().length());
+    System.out.println("Id: " + id);
+:};
+factor ::= CONST_FLOAT:constant {:
+    symbolTable.addSymbol("_" + constant.toString(), "Float", constant, 10);
+    System.out.println("Constant float: " + constant );
+:};
+factor ::= CONST_INT:constant {:
+symbolTable.addSymbol("_" + constant.toString(), "Int", constant, 10);
+System.out.println("Constant int: " + constant );
+:};
+factor ::= CONST_STRING:constant {:
+symbolTable.addSymbol(constant.toString().replace("\"", ""), "String", constant, constant.toString().length());
+System.out.println("Constant string: " + constant );
+:};
 factor ::= OPEN_BRACKET expression CLOSE_BRACKET {: System.out.println("Factor = (Expression)"); :};
 reorder ::= REORDER OPEN_BRACKET OPEN_SQUARE_BRACKET expressionList CLOSE_SQUARE_BRACKET COMMA CONST_INT COMMA CONST_INT CLOSE_BRACKET {: System.out.println("reorder"); :};
 expressionList ::= expression COMMA expressionList {: System.out.println(","); :};
