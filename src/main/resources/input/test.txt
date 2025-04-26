@@ -19,6 +19,9 @@ c := sumFirstsPrimes(9-2)
 if (NOT a) {
     /* Comentario */
     a := 4
+    if (a > b) {
+        c := 4
+    }
 } else {
     b := c + 4
 }
