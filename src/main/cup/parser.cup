@@ -86,8 +86,8 @@ sentenceInit ::= multipleSentence
         symbolTable.printTable();
     :};
 sentenceInit ::= /* EMPTY */ {:System.out.println("comentario"); :};
-multipleSentence ::= sentence multipleSentence {: System.out.println("multipleSentence ::= sentence multipleSentence"); :};
-multipleSentence ::= sentence {: System.out.println("multipleSentence ::= sentence"); :};
+multipleSentence ::= sentence multipleSentence;
+multipleSentence ::= sentence;
 sentence ::= blockInit;
 sentence ::= assignment {: System.out.println("End"); :};
 sentence ::= while {: System.out.println("While sentence"); :};
